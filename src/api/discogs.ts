@@ -15,7 +15,8 @@ function token(): string | undefined {
 }
 
 export function discogsConfigured(): boolean {
-  return Boolean(token()) || Boolean(import.meta.env.VITE_SUPABASE_URL)
+  // Cuando exista la función de Supabase (v0.2) también contará como configurado.
+  return Boolean(token())
 }
 
 async function get<T>(path: string, params: Record<string, string | number | undefined>): Promise<T> {
@@ -24,7 +25,13 @@ async function get<T>(path: string, params: Record<string, string | number | und
   const headers: Record<string, string> = { 'User-Agent': USER_AGENT }
   const t = token()
   if (t) headers.Authorization = `Discogs token=${t}`
-  const res = await fetch(url, { headers })
+  let res: Response
+  try {
+    res = await fetch(url, { headers, signal: AbortSignal.timeout(15000) })
+  } catch (e) {
+    if (e instanceof DOMException && e.name === 'TimeoutError') throw new Error('Discogs tardó demasiado en responder. Intenta de nuevo.')
+    throw e
+  }
   if (res.status === 429) throw new Error('Discogs pidió esperar un momento (límite de consultas). Intenta en unos segundos.')
   if (!res.ok) throw new Error(`Discogs respondió ${res.status}`)
   return res.json() as Promise<T>
@@ -44,6 +51,8 @@ interface SearchResult {
   barcode?: string[]
   genre?: string[]
   style?: string[]
+  master_id?: number
+  community?: { have?: number; want?: number }
 }
 
 function splitTitle(full: string): { artist: string; title: string } {
@@ -75,7 +84,53 @@ function toCandidate(r: SearchResult): ReleaseCandidate {
     barcode: r.barcode?.[0]?.replace(/\D/g, '') || undefined,
     genres: r.genre ?? [],
     styles: r.style ?? [],
+    discogsMasterId: r.master_id || undefined,
   }
+}
+
+export interface MasterInfo {
+  id: number
+  title: string
+  artist: string
+  year?: number
+  genres: string[]
+  styles: string[]
+  thumbUrl?: string
+  coverUrl?: string
+  /** 0..1 según cuánta gente tiene el disco en Discogs. */
+  popularity?: number
+}
+
+/** Discografía (masters) de un artista en vinilo, para sugerencias. */
+export async function searchMasters(artist: string): Promise<MasterInfo[]> {
+  const data = await get<{ results: SearchResult[] }>('/database/search', {
+    artist,
+    type: 'master',
+    format: 'Vinyl',
+    per_page: 50,
+  })
+  // Discogs distingue homónimos con "(2)", "(3)"…; si hay resultados del nombre exacto, se descartan los demás.
+  const all = data.results ?? []
+  const rawArtist = (r: SearchResult) => r.title.split(' - ')[0]?.trim().toLowerCase()
+  const exact = all.filter((r) => rawArtist(r) === artist.trim().toLowerCase())
+  const rows = exact.length ? exact : all
+  // log10 aplana la diferencia entre 100 y 100 000 dueños; se normaliza contra el más tenido.
+  const pops = rows.map((r) => Math.log10(1 + (r.community?.have ?? 0)))
+  const max = Math.max(0, ...pops)
+  return rows.map((r, i) => {
+    const { artist: a, title } = splitTitle(r.title)
+    return {
+      id: r.id,
+      title,
+      artist: a,
+      year: r.year ? Number(r.year) || undefined : undefined,
+      genres: r.genre ?? [],
+      styles: r.style ?? [],
+      thumbUrl: r.thumb || undefined,
+      coverUrl: r.cover_image || undefined,
+      popularity: max ? pops[i] / max : undefined,
+    }
+  })
 }
 
 export async function searchByBarcode(barcode: string): Promise<ReleaseCandidate[]> {

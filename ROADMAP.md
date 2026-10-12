@@ -12,6 +12,8 @@
 - [x] Lista de deseos (por ahora en este celular).
 - [x] Funciona sin internet (PWA, portadas guardadas).
 - [x] Respaldo y restauración en archivo.
+- [x] "Escuchar en Spotify" en la ficha, en deseos y en resultados: abre la app de Spotify, sin cuenta ni clave; el enlace es exacto cuando MusicBrainz conoce el álbum y, si no, una búsqueda.
+- [x] "Para ti": sugerencias según calificaciones y compras, con la razón de cada una (más discos de tus favoritos, artistas parecidos vía ListenBrainz). Se calcula en el celular, sin cuenta, y se guarda 30 días.
 
 ## v0.2 · La nube familiar
 - [ ] Inicio de sesión (correo con enlace mágico) y grupo familiar con invitación.
@@ -23,6 +25,7 @@
 
 ## v0.3 · El chat
 - [ ] Chatbot con Claude: recomendaciones, comparaciones, imprescindibles.
+- [ ] "Para ti" con Claude: reordena y explica mejor las sugerencias de la v0.1 (una llamada al día, guardada en la nube para toda la familia).
 - [ ] Búsqueda web limitada a sitios confiables, siempre con fuentes.
 - [ ] Dónde comprar: Discogs Marketplace, Mercado Libre, Amazon MX, tiendas que tú apruebes.
 - [ ] Conoce la colección: "ya lo tienes" / "te falta".

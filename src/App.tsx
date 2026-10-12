@@ -5,6 +5,7 @@ import { Search } from './pages/Search'
 import { AlbumPage } from './pages/AlbumPage'
 import { Wishlist } from './pages/Wishlist'
 import { Settings } from './pages/Settings'
+import { ForYou } from './pages/ForYou'
 import { TabBar } from './components/TabBar'
 
 // El lector de códigos pesa bastante; se carga solo al abrir el escáner.
@@ -20,6 +21,7 @@ function Shell() {
         <Route path="/buscar" element={<Search />} />
         <Route path="/escanear" element={<Suspense fallback={<main className="page"><p className="muted">Abriendo la cámara…</p></main>}><Scan /></Suspense>} />
         <Route path="/album/:id" element={<AlbumPage />} />
+        <Route path="/para-ti" element={<ForYou />} />
         <Route path="/deseos" element={<Wishlist />} />
         <Route path="/ajustes" element={<Settings />} />
       </Routes>

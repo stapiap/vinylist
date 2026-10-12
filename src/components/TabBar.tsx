@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { GridIcon, HeartIcon, ScanIcon, SearchIcon } from './Icons'
+import { GridIcon, HeartIcon, ScanIcon, SearchIcon, SparkIcon } from './Icons'
 
 export function TabBar() {
   return (
@@ -7,6 +7,7 @@ export function TabBar() {
       <NavLink to="/" end><GridIcon />Colección</NavLink>
       <NavLink to="/buscar"><SearchIcon />Buscar</NavLink>
       <NavLink to="/escanear" className="scan" aria-label="Escanear disco"><ScanIcon width={28} height={28} strokeWidth={2.2} /></NavLink>
+      <NavLink to="/para-ti"><SparkIcon />Para ti</NavLink>
       <NavLink to="/deseos"><HeartIcon />Deseos</NavLink>
     </nav>
   )

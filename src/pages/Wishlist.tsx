@@ -3,6 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db, newId } from '../db'
 import { Cover } from '../components/AlbumCard'
 import { getProfileName } from '../lib/profile'
+import { spotifySearchUrl } from '../lib/spotify'
 
 /**
  * Lista de deseos de la familia. En esta versión vive en el celular;
@@ -50,6 +51,7 @@ export function Wishlist() {
                 <span className="result__title">{it.title}</span>
                 <span className="result__meta">{it.artist}{it.year ? ` · ${it.year}` : ''}</span>
                 <span className="result__meta">Lo quiere: {it.wantedBy}</span>
+                <a className="result__meta" href={spotifySearchUrl(it.artist, it.title)} target="_blank" rel="noreferrer" aria-label={`Escuchar «${it.title}» en Spotify`} style={{ display: 'inline-flex', alignItems: 'center', minHeight: 44, margin: '-10px 0', color: 'var(--accent)', fontWeight: 700 }}>Escuchar en Spotify</a>
               </div>
               {it.wantedBy === me ? (
                 <button className="btn btn--sm" onClick={() => db.wishlist.delete(it.id)}>Quitar</button>

@@ -30,6 +30,13 @@ export const KeyboardIcon = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base} {...p}><rect x="3" y="6" width="18" height="12" rx="2" /><path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10" /></svg>
 )
 export const StarPath = () => <path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" />
+export const SparkIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base} {...p}><path d="M12 3l2 5.5L19.5 10 14 12l-2 5.5L10 12 4.5 10 10 8.5z" /><path d="M19 17l.8 2.2L22 20l-2.2.8L19 23l-.8-2.2L16 20l2.2-.8z" strokeWidth={1.5} /></svg>
+)
+/** Logotipo de Spotify (uso permitido para enlazar a su app). */
+export const SpotifyIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg width={24} height={24} viewBox="0 0 24 24" fill="currentColor" aria-hidden {...p}><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.6 14.4a.6.6 0 0 1-.9.2c-2.4-1.5-5.4-1.8-9-1a.6.6 0 1 1-.3-1.2c3.9-.9 7.3-.5 10 1.1.3.2.4.6.2.9zm1.2-2.7a.8.8 0 0 1-1.1.3c-2.8-1.7-7-2.2-10.3-1.2a.8.8 0 1 1-.5-1.5c3.8-1.1 8.4-.6 11.6 1.4.4.2.5.7.3 1zm.1-2.8C14.6 8.9 9.1 8.7 6 9.7a.9.9 0 1 1-.6-1.8c3.6-1.1 9.6-.9 13.4 1.4a.9.9 0 1 1-1 1.6z" /></svg>
+)
 export const DiscIcon = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base} {...p}><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="2.5" /></svg>
 )

@@ -24,6 +24,14 @@ export interface Album {
   discogsId?: number
   /** MBID del lanzamiento en MusicBrainz. */
   musicbrainzId?: string
+  /** Master de Discogs (el álbum sin importar la edición). */
+  discogsMasterId?: number
+  musicbrainzArtistId?: string
+  musicbrainzReleaseGroupId?: string
+  /** ID del álbum en Spotify, si MusicBrainz lo conoce; undefined = no se ha buscado o no hay. */
+  spotifyAlbumId?: string
+  /** Última vez que se intentó encontrar el ID de Spotify. */
+  spotifyCheckedAt?: string
   /** Calificación de 1 a 10 (medias estrellas). Sin calificar = undefined. */
   rating?: number
   /** Estado del disco y de la funda, escala Goldmine. */
@@ -74,6 +82,9 @@ export interface ReleaseCandidate {
   barcode?: string
   genres: string[]
   styles: string[]
+  discogsMasterId?: number
+  musicbrainzArtistId?: string
+  musicbrainzReleaseGroupId?: string
 }
 
 /** Un disco que alguien de la familia quiere. */

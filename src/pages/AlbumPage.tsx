@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db, deleteAlbum, updateAlbum } from '../db'
@@ -6,6 +6,7 @@ import { StarRating } from '../components/StarRating'
 import { Cover } from '../components/AlbumCard'
 import { BackIcon, EditIcon } from '../components/Icons'
 import { formatStars } from '../lib/rating'
+import { resolveSpotifyAlbumId, spotifyUrlFor } from '../lib/spotifyLink'
 import { CONDITIONS, type Album, type Condition } from '../types'
 
 export function AlbumPage() {
@@ -14,10 +15,16 @@ export function AlbumPage() {
   const album = useLiveQuery(() => db.albums.get(id), [id])
   const [editing, setEditing] = useState(false)
 
+  // Busca una sola vez el ID exacto de Spotify; la ficha se actualiza sola cuando llega.
+  useEffect(() => {
+    if (album) void resolveSpotifyAlbumId(album)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [album?.id, album?.spotifyCheckedAt])
+
   if (album === undefined) return <main className="page"><p className="muted">Cargando…</p></main>
   if (album === null) return <main className="page"><p>Este disco ya no está en la colección.</p><Link to="/" className="btn">Volver</Link></main>
 
-  const spotify = `https://open.spotify.com/search/${encodeURIComponent(`${album.artist} ${album.title}`)}`
+  const spotify = spotifyUrlFor(album)
   const discogs = album.discogsId ? `https://www.discogs.com/release/${album.discogsId}` : undefined
 
   return (

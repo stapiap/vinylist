@@ -25,6 +25,7 @@ export async function albumFromCandidate(c: ReleaseCandidate): Promise<Omit<Albu
         thumbUrl: d.thumbUrl ?? c.thumbUrl,
         tracklist: d.tracklist,
         discogsId: Number(c.sourceId),
+        discogsMasterId: c.discogsMasterId,
       }
     } catch {
       // Si la ficha completa falla, guardamos lo que ya tenemos.
@@ -45,7 +46,10 @@ export async function albumFromCandidate(c: ReleaseCandidate): Promise<Omit<Albu
     thumbUrl: c.thumbUrl,
     tracklist: [],
     discogsId: c.source === 'discogs' ? Number(c.sourceId) : undefined,
+    discogsMasterId: c.discogsMasterId,
     musicbrainzId: c.source === 'musicbrainz' ? c.sourceId : undefined,
+    musicbrainzArtistId: c.musicbrainzArtistId,
+    musicbrainzReleaseGroupId: c.musicbrainzReleaseGroupId,
   }
 }
 
