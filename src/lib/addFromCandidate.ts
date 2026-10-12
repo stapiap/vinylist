@@ -1,0 +1,59 @@
+import { addAlbum, findDuplicate } from '../db'
+import { getRelease } from '../api/discogs'
+import type { Album, ReleaseCandidate } from '../types'
+
+/**
+ * Convierte una edición encontrada en un disco de la colección.
+ * Si viene de Discogs, pide la ficha completa (canciones, portada grande).
+ */
+export async function albumFromCandidate(c: ReleaseCandidate): Promise<Omit<Album, 'id' | 'addedAt' | 'updatedAt'>> {
+  if (c.source === 'discogs') {
+    try {
+      const d = await getRelease(Number(c.sourceId))
+      return {
+        title: d.title,
+        artist: d.artist,
+        year: d.year ?? c.year,
+        label: d.label ?? c.label,
+        catalogNumber: d.catalogNumber ?? c.catalogNumber,
+        country: d.country ?? c.country,
+        genres: d.genres.length ? d.genres : c.genres,
+        styles: d.styles.length ? d.styles : c.styles,
+        format: d.format ?? c.format,
+        barcode: d.barcode ?? c.barcode,
+        coverUrl: d.coverUrl ?? c.coverUrl,
+        thumbUrl: d.thumbUrl ?? c.thumbUrl,
+        tracklist: d.tracklist,
+        discogsId: Number(c.sourceId),
+      }
+    } catch {
+      // Si la ficha completa falla, guardamos lo que ya tenemos.
+    }
+  }
+  return {
+    title: c.title,
+    artist: c.artist,
+    year: c.year,
+    label: c.label,
+    catalogNumber: c.catalogNumber,
+    country: c.country,
+    genres: c.genres,
+    styles: c.styles,
+    format: c.format,
+    barcode: c.barcode,
+    coverUrl: c.coverUrl,
+    thumbUrl: c.thumbUrl,
+    tracklist: [],
+    discogsId: c.source === 'discogs' ? Number(c.sourceId) : undefined,
+    musicbrainzId: c.source === 'musicbrainz' ? c.sourceId : undefined,
+  }
+}
+
+export async function duplicateOf(c: ReleaseCandidate): Promise<Album | undefined> {
+  return findDuplicate({ discogsId: c.source === 'discogs' ? Number(c.sourceId) : undefined, barcode: c.barcode })
+}
+
+export async function addCandidate(c: ReleaseCandidate): Promise<Album> {
+  const data = await albumFromCandidate(c)
+  return addAlbum(data)
+}
