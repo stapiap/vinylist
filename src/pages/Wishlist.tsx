@@ -2,9 +2,10 @@ import { useState, type FormEvent } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db, newId } from '../db'
 import { Cover } from '../components/AlbumCard'
+import { SpotifyIcon } from '../components/Icons'
+import { Logo } from '../components/Logo'
 import { getProfileName } from '../lib/profile'
 import { spotifySearchUrl } from '../lib/spotify'
-import { Logo } from '../components/Logo'
 
 /**
  * Lista de deseos de la familia. En esta versión vive en el celular;
@@ -29,42 +30,52 @@ export function Wishlist() {
     <main className="page">
       <div className="stack" style={{ gap: 8 }}>
         <Logo />
-        <h1>Deseos</h1>
-        <span className="muted">Lo que la familia quiere tener. Útil para regalos.</span>
+        <div className="title-row">
+          <h1>Deseos</h1>
+          {items.length > 0 && <span className="badge">{items.length} {items.length === 1 ? 'disco' : 'discos'}</span>}
+        </div>
+        <span className="muted">Lo que quiere la familia. Si alguien lo aparta para regalarlo, el que lo pidió no lo ve.</span>
       </div>
 
-      <form className="card stack" onSubmit={add}>
-        <label className="field"><span>Álbum</span><input className="input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Wish You Were Here" /></label>
-        <label className="field"><span>Artista</span><input className="input" value={artist} onChange={(e) => setArtist(e.target.value)} placeholder="Pink Floyd" /></label>
-        <button className="btn btn--primary" type="submit">Agregar a mis deseos</button>
-      </form>
-
-      {items.length === 0 && <div className="empty"><p>Aún no hay deseos. Agrega el primero arriba.</p></div>}
+      {items.length === 0 && <div className="empty"><p>Aún no hay deseos. Agrega el primero aquí abajo.</p></div>}
 
       <div className="stack" style={{ gap: 10 }}>
         {items.map((it) => {
           const reservedByOther = it.reservedBy && it.reservedBy !== it.wantedBy
           const hideFromWanter = reservedByOther && it.wantedBy === me
           return (
-            <div className="result" key={it.id}>
-              <Cover src={it.coverUrl} title={it.title} className="thumb" />
-              <div className="grow stack" style={{ gap: 2 }}>
-                <span className="result__title">{it.title}</span>
-                <span className="result__meta">{it.artist}{it.year ? ` · ${it.year}` : ''}</span>
-                <span className="result__meta">Lo quiere: {it.wantedBy}</span>
-                <a className="result__meta" href={spotifySearchUrl(it.artist, it.title)} target="_blank" rel="noreferrer" aria-label={`Escuchar «${it.title}» en Spotify`} style={{ display: 'inline-flex', alignItems: 'center', minHeight: 44, margin: '-10px 0', color: 'var(--accent)', fontWeight: 700 }}>Escuchar en Spotify</a>
+            <div className="card stack" key={it.id} style={{ gap: 10 }}>
+              <div className="row" style={{ alignItems: 'flex-start' }}>
+                <Cover src={it.coverUrl} title={it.title} className="wish__cover" />
+                <div className="grow stack" style={{ gap: 2 }}>
+                  <span className="result__title">{it.title}</span>
+                  <span className="result__meta">{it.artist}{it.year ? ` · ${it.year}` : ''}</span>
+                  <span className="result__meta">Lo quiere {it.wantedBy === me ? `${it.wantedBy} (tú)` : it.wantedBy}</span>
+                </div>
               </div>
-              {it.wantedBy === me ? (
-                <button className="btn btn--sm" onClick={() => db.wishlist.delete(it.id)}>Quitar</button>
-              ) : hideFromWanter ? null : (
-                <button className={`btn btn--sm ${it.reservedBy ? '' : 'btn--primary'}`} onClick={() => db.wishlist.update(it.id, { reservedBy: it.reservedBy ? undefined : me })}>
-                  {it.reservedBy ? 'Apartado' : 'Lo regalo yo'}
-                </button>
-              )}
+              <div className="row">
+                <a className="btn btn--sm grow" href={spotifySearchUrl(it.artist, it.title)} target="_blank" rel="noreferrer">
+                  <SpotifyIcon width={18} height={18} className="spotify" /> Escuchar<span className="visually-hidden"> «{it.title}» en Spotify</span>
+                </a>
+                {it.wantedBy === me ? (
+                  <button className="btn btn--sm grow" onClick={() => db.wishlist.delete(it.id)}>Quitar</button>
+                ) : hideFromWanter ? null : (
+                  <button className={`btn btn--sm grow ${it.reservedBy ? '' : 'btn--primary'}`} onClick={() => db.wishlist.update(it.id, { reservedBy: it.reservedBy ? undefined : me })}>
+                    {it.reservedBy ? 'Ya apartado' : 'Lo regalo yo'}
+                  </button>
+                )}
+              </div>
             </div>
           )
         })}
       </div>
+
+      <form className="card stack" onSubmit={add}>
+        <span className="eyebrow">Agregar un deseo</span>
+        <label className="field"><span>Álbum</span><input className="input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Wish You Were Here" /></label>
+        <label className="field"><span>Artista</span><input className="input" value={artist} onChange={(e) => setArtist(e.target.value)} placeholder="Pink Floyd" /></label>
+        <button className="btn btn--primary" type="submit">Agregar a mis deseos</button>
+      </form>
     </main>
   )
 }

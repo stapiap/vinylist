@@ -11,7 +11,7 @@ import type { Album } from '../types'
 export function Settings() {
   const albums = useLiveQuery(() => db.albums.toArray(), []) ?? []
   const [name, setName] = useState(getProfileName())
-  const [msg, setMsg] = useState<string | null>(null)
+  const [msg, setMsg] = useState<{ text: string; error?: boolean } | null>(null)
   const cloud = Boolean(import.meta.env.VITE_SUPABASE_URL)
 
   function download() {
@@ -28,47 +28,62 @@ export function Settings() {
       const data = JSON.parse(await file.text()) as { albums?: Album[] }
       if (!Array.isArray(data.albums)) throw new Error('El archivo no es un respaldo de VinyList.')
       await db.albums.bulkPut(data.albums)
-      setMsg(`Se importaron ${data.albums.length} discos.`)
+      setMsg({ text: `Se importaron ${data.albums.length} discos.` })
     } catch (e) {
-      setMsg(e instanceof Error ? e.message : 'No se pudo importar.')
+      setMsg({ text: e instanceof Error ? e.message : 'No se pudo importar.', error: true })
     }
   }
 
   return (
     <main className="page">
-      <div className="row">
-        <Link to="/" className="icon-btn" aria-label="Volver"><BackIcon /></Link>
+      <div className="stack" style={{ gap: 8 }}>
+        <div className="row">
+          <Link to="/" className="icon-btn icon-btn--ghost" aria-label="Volver" style={{ margin: '0 0 0 -10px' }}><BackIcon /></Link>
+          <Logo />
+        </div>
         <h1>Ajustes</h1>
       </div>
 
-      <section className="card stack">
-        <h3>Quién usa este celular</h3>
-        <label className="field"><span>Tu nombre (para las calificaciones y los deseos)</span>
-          <input className="input" value={name} onChange={(e) => setName(e.target.value)} onBlur={() => setProfileName(name)} />
+      <section className="stack" style={{ gap: 0 }}>
+        <span className="eyebrow">Tú</span>
+        <label className="settings-row">
+          <span>Tu nombre</span>
+          <input className="input input--inline" value={name} onChange={(e) => setName(e.target.value)} onBlur={() => setProfileName(name)} aria-describedby="nombre-ayuda" />
         </label>
+        <span id="nombre-ayuda" className="muted" style={{ fontSize: 13, padding: '8px 0 12px' }}>Para las calificaciones y los deseos, mientras llega la cuenta por persona.</span>
       </section>
 
-      <section className="card stack">
-        <h3>Fuentes de datos</h3>
-        <p className="muted" style={{ margin: 0 }}>
-          Discogs: {discogsConfigured() ? 'configurado' : 'sin configurar (se usa MusicBrainz, sin géneros ni canciones)'}.<br />
-          Nube familiar: {cloud ? 'configurada' : 'pendiente. Por ahora la colección vive en este celular.'}
-        </p>
-      </section>
-
-      <section className="card stack">
-        <h3>Respaldo</h3>
-        <p className="muted" style={{ margin: 0 }}>Tus datos siempre son tuyos. Descarga un respaldo o restaura uno.</p>
-        <div className="row">
-          <button className="btn grow" onClick={download} disabled={albums.length === 0}>Descargar respaldo</button>
-          <label className="btn grow">Restaurar<input type="file" accept="application/json" hidden onChange={(e) => e.target.files?.[0] && importFile(e.target.files[0])} /></label>
+      <section className="stack" style={{ gap: 0 }}>
+        <span className="eyebrow">Respaldo</span>
+        <div className="settings-row">
+          <span>Exportar colección</span>
+          <button className="btn btn--sm" onClick={download} disabled={albums.length === 0}>Archivo JSON</button>
         </div>
-        {msg && <div className="notice">{msg}</div>}
+        <div className="settings-row">
+          <span>Restaurar un respaldo</span>
+          <label className="btn btn--sm">Elegir archivo<input type="file" accept="application/json" hidden onChange={(e) => e.target.files?.[0] && importFile(e.target.files[0])} /></label>
+        </div>
+        {msg && <div className={`notice ${msg.error ? 'notice--error' : ''}`} role="status" style={{ marginTop: 10 }}>{msg.text}</div>}
+      </section>
+
+      <section className="stack" style={{ gap: 0 }}>
+        <span className="eyebrow">De dónde salen los datos</span>
+        <div className="settings-row"><span>Discogs</span><span>{discogsConfigured() ? <>Conectado<i className="dot" /></> : <>Sin configurar<i className="dot dot--off" /></>}</span></div>
+        <div className="settings-row"><span>MusicBrainz</span><span>Listo<i className="dot" /></span></div>
+        <div className="settings-row"><span>Spotify</span><span>Abre la app<i className="dot" /></span></div>
+        <div className="settings-row"><span>Nube familiar</span><span>{cloud ? <>Configurada<i className="dot" /></> : <>Viene en la v0.2<i className="dot dot--off" /></>}</span></div>
+        {!discogsConfigured() && <span className="muted" style={{ fontSize: 13, padding: '8px 0 0' }}>Sin Discogs se usa MusicBrainz: funciona, pero sin géneros ni lista de canciones.</span>}
+      </section>
+
+      <section className="stack" style={{ gap: 0 }}>
+        <span className="eyebrow">VinyList</span>
+        <div className="settings-row"><span>Apariencia</span><span>Como el celular</span></div>
+        <div className="settings-row"><span>Versión</span><span className="mono">{__APP_VERSION__}</span></div>
       </section>
 
       <div className="about">
-        <Logo size={32} />
-        <span>Versión {__APP_VERSION__} · Hecha para la familia, sin membresías.</span>
+        <Logo />
+        <span>Hecha para la familia, sin membresías. Tus datos siempre son tuyos.</span>
       </div>
     </main>
   )

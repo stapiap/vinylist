@@ -4,8 +4,9 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db, deleteAlbum, updateAlbum } from '../db'
 import { StarRating } from '../components/StarRating'
 import { Cover } from '../components/AlbumCard'
-import { BackIcon, EditIcon } from '../components/Icons'
+import { BackIcon, DiscIcon, SpotifyIcon } from '../components/Icons'
 import { formatStars } from '../lib/rating'
+import { priceLabel, purchaseDateLabel } from '../lib/text'
 import { resolveSpotifyAlbumId, spotifyUrlFor } from '../lib/spotifyLink'
 import { CONDITIONS, type Album, type Condition } from '../types'
 
@@ -28,11 +29,13 @@ export function AlbumPage() {
   const discogs = album.discogsId ? `https://www.discogs.com/release/${album.discogsId}` : undefined
 
   return (
-    <main className="page page--flush">
+    <main className="page">
+      <div className="hero-nav">
+        <button type="button" className="btn btn--sm btn--ghost" onClick={() => nav(-1)}><BackIcon width={20} height={20} /> Colección</button>
+        <button type="button" className="btn btn--sm btn--ghost" onClick={() => setEditing(true)}>Editar</button>
+      </div>
       <div className="hero">
         <Cover src={album.coverUrl ?? album.thumbUrl} title={album.title} className="hero__img" />
-        <button className="icon-btn" aria-label="Volver" onClick={() => nav(-1)}><BackIcon /></button>
-        <button className="icon-btn icon-btn--right" aria-label="Editar datos" onClick={() => setEditing(true)}><EditIcon /></button>
       </div>
 
       <div className="stack" style={{ gap: 4 }}>
@@ -46,35 +49,35 @@ export function AlbumPage() {
       <section className="card stack" aria-labelledby="rating-h">
         <div className="row" style={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
           <span id="rating-h" className="eyebrow">Tu calificación · opcional</span>
-          <span className="rating-big">{album.rating ? `${formatStars(album.rating)} / 5` : '—'}</span>
+          {album.rating ? <span className="rating-big">{formatStars(album.rating)} / 5</span> : null}
         </div>
         <StarRating value={album.rating} onChange={(r) => updateAlbum(album.id, { rating: r })} />
-        <span className="muted" style={{ fontSize: 13 }}>Toca la mitad izquierda de una estrella para media estrella.</span>
+        <span className="muted" style={{ fontSize: 13 }}>{album.rating ? 'Toca la mitad izquierda de una estrella para media estrella.' : 'Sin calificar. Califícalo cuando quieras.'}</span>
       </section>
 
-      <div className="facts">
+      <div className="facts facts--rows">
         <div className="fact"><span>Estado disco / funda</span><span>{album.mediaCondition ?? '—'} / {album.sleeveCondition ?? '—'}</span></div>
         <div className="fact"><span>Ubicación</span><span>{album.location || '—'}</span></div>
-        <div className="fact"><span>Compra</span><span>{[album.purchaseDate, album.purchasePrice !== undefined ? `$${album.purchasePrice}` : undefined, album.purchasePlace].filter(Boolean).join(' · ') || '—'}</span></div>
-        <div className="fact"><span>Catálogo / código</span><span>{[album.catalogNumber, album.barcode].filter(Boolean).join(' · ') || '—'}</span></div>
+        <div className="fact"><span>Compra</span><span>{[album.purchaseDate && purchaseDateLabel(album.purchaseDate), album.purchasePrice !== undefined ? priceLabel(album.purchasePrice) : undefined, album.purchasePlace].filter(Boolean).join(' · ') || '—'}</span></div>
+        <div className="fact"><span>Catálogo / código</span><span className="mono">{[album.catalogNumber, album.barcode].filter(Boolean).join(' · ') || '—'}</span></div>
       </div>
 
       {album.notes && <p className="card" style={{ margin: 0, whiteSpace: 'pre-wrap' }}>{album.notes}</p>}
 
       {album.tracklist.length > 0 && (
-        <section className="stack">
-          <h3>Canciones</h3>
+        <section className="stack" aria-labelledby="tracks-h">
+          <h3 id="tracks-h" className="eyebrow">Canciones</h3>
           {album.tracklist.map((t, i) => (
             <div className="track" key={`${t.position}-${i}`}><span>{t.position}</span><span>{t.title}</span><span>{t.duration}</span></div>
           ))}
         </section>
       )}
 
-      <div className="row" style={{ flexWrap: 'wrap' }}>
-        <a className="btn btn--sm" href={spotify} target="_blank" rel="noreferrer">Escuchar en Spotify</a>
-        {discogs && <a className="btn btn--sm" href={discogs} target="_blank" rel="noreferrer">Ver en Discogs</a>}
-        <button className="btn btn--sm btn--danger" onClick={async () => { if (confirm(`¿Quitar "${album.title}" de la colección?`)) { await deleteAlbum(album.id); nav('/', { replace: true }) } }}>Quitar</button>
+      <div className="album-actions">
+        <a className="btn btn--sm" href={spotify} target="_blank" rel="noreferrer"><SpotifyIcon width={18} height={18} className="spotify" /> Escuchar en Spotify</a>
+        {discogs && <a className="btn btn--sm btn--primary" href={discogs} target="_blank" rel="noreferrer"><DiscIcon width={18} height={18} /> Ver en Discogs</a>}
       </div>
+      <button type="button" className="btn btn--sm btn--link" style={{ alignSelf: 'center' }} onClick={async () => { if (confirm(`¿Quitar "${album.title}" de la colección?`)) { await deleteAlbum(album.id); nav('/', { replace: true }) } }}>Quitar de la colección</button>
 
       {editing && <EditSheet album={album} onClose={() => setEditing(false)} />}
     </main>

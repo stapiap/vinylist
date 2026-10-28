@@ -1,4 +1,4 @@
--- Surcos · esquema de la nube familiar (Supabase / Postgres).
+-- VinyList · esquema de la nube familiar (Supabase / Postgres).
 -- Se aplica en la versión 0.2, cuando se active la sincronización.
 -- Ejecutar en el editor SQL del proyecto de Supabase.
 

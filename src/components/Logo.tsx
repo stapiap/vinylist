@@ -2,7 +2,7 @@ import { useId } from 'react'
 
 /**
  * El logo de VinyList: la funda cuadrada con el disco saliendo, y el nombre.
- * Los colores salen de las variables --logo-* (cambian en modo oscuro).
+ * Los colores salen de las variables --logo-*; en modo oscuro solo cambian la sombra y el canto claro del disco.
  * `size` es la altura del símbolo en píxeles; el nombre se escala con él.
  */
 export function Logo({ size = 24, wordmark = true, className = '' }: { size?: number; wordmark?: boolean; className?: string }) {

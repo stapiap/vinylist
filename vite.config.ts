@@ -1,9 +1,14 @@
 import { defineConfig } from 'vitest/config'
+import { loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import pkg from './package.json' with { type: 'json' }
 
-export default defineConfig({
+// En GitHub Pages la app vive bajo /vinylist/ (VITE_BASE); en otros hospedajes, en la raíz.
+export default defineConfig(({ mode }) => {
+  const base = loadEnv(mode, '.', 'VITE_').VITE_BASE || '/'
+  return {
+  base,
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
   },
@@ -20,12 +25,14 @@ export default defineConfig({
         theme_color: '#F4F2ED',
         background_color: '#F4F2ED',
         display: 'standalone',
-        start_url: '/',
+        start_url: base,
+        scope: base,
         icons: [
           { src: 'icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
           { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
           { src: 'icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: 'icon-maskable.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'maskable' },
         ],
       },
       workbox: {
@@ -41,14 +48,16 @@ export default defineConfig({
             },
           },
           {
-            // Las fuentes también, para que la app se vea igual sin internet.
-            urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
+            // Las fuentes también, para que la app se vea igual sin internet: la hoja de estilos se refresca al fondo…
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'StaleWhileRevalidate',
-            options: {
-              cacheName: 'fuentes',
-              expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 },
-              cacheableResponse: { statuses: [0, 200] },
-            },
+            options: { cacheName: 'fuentes-css', expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 }, cacheableResponse: { statuses: [0, 200] } },
+          },
+          {
+            // …y los archivos de fuente, que no cambian, se guardan de una vez.
+            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+            handler: 'CacheFirst',
+            options: { cacheName: 'fuentes', expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 }, cacheableResponse: { statuses: [0, 200] } },
           },
         ],
       },
@@ -57,4 +66,5 @@ export default defineConfig({
   test: {
     environment: 'node',
   },
+  }
 })

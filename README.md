@@ -32,13 +32,15 @@ Sin token de Discogs la app sigue funcionando con MusicBrainz, pero sin géneros
 
 ## Publicarla gratis
 
-Cualquier hospedaje de sitios estáticos sirve (Vercel, Netlify, Cloudflare Pages):
+**GitHub Pages** (ya viene configurado): en el repositorio, Settings → Pages → Source: "GitHub Actions". Cada vez que `main` cambia, el flujo `.github/workflows/pages.yml` compila la app y la publica en `https://<usuario>.github.io/vinylist/`. Al abrir ese enlace en el celular, "Agregar a pantalla de inicio" instala la app.
+
+También sirve cualquier hospedaje de sitios estáticos (Vercel, Netlify, Cloudflare Pages):
 
 ```bash
-npm run build   # genera la carpeta dist/
+npm run build   # genera la carpeta dist/ (con VITE_BASE=/ruta/ si no va en la raíz)
 ```
 
-Configura las variables de `.env.example` en el panel del hospedaje. Al abrir el enlace en el celular, "Agregar a pantalla de inicio" instala la app.
+Configura las variables de `.env.example` en el panel del hospedaje.
 
 ## Comandos
 

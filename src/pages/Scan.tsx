@@ -80,7 +80,7 @@ export function Scan() {
       {phase === 'scanning' && (
         <div className="scanner">
           <video ref={videoRef} muted playsInline />
-          <div className="scanner__frame"><div className="scanner__box" /></div>
+          <div className="scanner__frame"><div className="scanner__box"><i className="scanner__corner" /><i className="scanner__corner" /><i className="scanner__line" /></div></div>
           <div className="scanner__top">
             <Link to="/" className="icon-btn" aria-label="Cerrar escáner"><CloseIcon /></Link>
             <span>Agregar disco</span>
@@ -101,7 +101,7 @@ export function Scan() {
       )}
 
       {phase === 'manual' && (
-        <form className="stack" style={{ paddingTop: 24 }} onSubmit={(e) => { e.preventDefault(); if (code.replace(/\D/g, '').length >= 8) lookup(code) }}>
+        <form className="stack" style={{ paddingTop: 'calc(24px + var(--safe-top))' }} onSubmit={(e) => { e.preventDefault(); if (code.replace(/\D/g, '').length >= 8) lookup(code) }}>
           <h2>Escribe el código de barras</h2>
           <label className="field"><span>Los 12 o 13 dígitos debajo de las barras</span>
             <input className="input" inputMode="numeric" autoFocus value={code} onChange={(e) => setCode(e.target.value)} placeholder="Ej. 075992731320" />
@@ -113,10 +113,10 @@ export function Scan() {
         </form>
       )}
 
-      {phase === 'looking' && <div className="empty" style={{ paddingTop: 80 }}><p>Buscando el código {code}…</p></div>}
+      {phase === 'looking' && <div className="empty" style={{ paddingTop: 'calc(80px + var(--safe-top))' }}><p>Buscando el código {code}…</p></div>}
 
       {phase === 'results' && (
-        <div className="stack" style={{ paddingTop: 24, gap: 14 }}>
+        <div className="stack" style={{ paddingTop: 'calc(24px + var(--safe-top))', gap: 14 }}>
           {dup && <Link to={`/album/${dup.id}`} className="notice">Ya tienen una edición de este disco: {dup.title}. Toca para verla.</Link>}
           {error && <div className="notice notice--error">{error}</div>}
           <div className="stack" style={{ gap: 2 }}>

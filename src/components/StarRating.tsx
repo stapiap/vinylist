@@ -11,13 +11,14 @@ interface Props {
 /**
  * Cinco estrellas con medias. Tocar la mitad izquierda de una estrella da media
  * estrella; la derecha, la estrella completa. Tocar de nuevo la misma calificación la quita.
+ * La estrella vacía lleva solo el contorno petróleo; la llena, el relleno de la etiqueta.
  */
 export function StarRating({ value, onChange, size = 'md' }: Props) {
   const interactive = Boolean(onChange)
   const px = size === 'sm' ? 16 : 40
   const pick = (r: number) => onChange?.(value === r ? undefined : r)
   return (
-    <div className={`stars ${size === 'sm' ? 'stars--sm' : ''}`} role={interactive ? 'group' : undefined} aria-label={interactive ? 'Calificación' : undefined}>
+    <div className={`stars ${size === 'sm' ? 'stars--sm' : ''}`} role={interactive ? 'group' : 'img'} aria-label={interactive ? 'Calificación' : `${value ? value / 2 : 0} de 5 estrellas`}>
       {[1, 2, 3, 4, 5].map((i) => {
         const fill = starFill(value, i)
         const width = fill === 'full' ? '100%' : fill === 'half' ? '50%' : '0%'
@@ -25,7 +26,7 @@ export function StarRating({ value, onChange, size = 'md' }: Props) {
           <div className="star" key={i}>
             <svg width={px} height={px} viewBox="0 0 24 24" fill="none" stroke="var(--star-empty)" strokeWidth={1.5} strokeLinejoin="round" aria-hidden="true"><StarPath /></svg>
             <div className="star__fill" style={{ width }}>
-              <svg width={px} height={px} viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" strokeWidth={1.5} strokeLinejoin="round" aria-hidden="true"><StarPath /></svg>
+              <svg width={px} height={px} viewBox="0 0 24 24" fill="var(--star)" stroke="var(--star)" strokeWidth={1.5} strokeLinejoin="round" aria-hidden="true"><StarPath /></svg>
             </div>
             {interactive && (
               <>

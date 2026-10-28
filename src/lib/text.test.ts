@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { albumKey, decadeLabel, isVariousArtists, looksLikeCompilation, tagLabel } from './text'
+import { albumKey, decadeLabel, isVariousArtists, looksLikeCompilation, priceLabel, purchaseDateLabel, tagLabel } from './text'
 
 describe('texto', () => {
   it('la llave de un álbum ignora la edición entre paréntesis y los acentos', () => {
@@ -26,5 +26,22 @@ describe('texto', () => {
     expect(looksLikeCompilation('Greatest Hits')).toBe(true)
     expect(looksLikeCompilation('Lo mejor de Juan Gabriel')).toBe(true)
     expect(looksLikeCompilation('Tusk')).toBe(false)
+  })
+})
+
+describe('fechas y precios de compra', () => {
+  it('dice Hoy cuando la compra es de hoy', () => {
+    expect(purchaseDateLabel('2026-07-12', new Date(2026, 6, 12, 15))).toBe('Hoy')
+  })
+  it('escribe la fecha corta en español', () => {
+    expect(purchaseDateLabel('2026-07-12', new Date(2026, 9, 28))).toMatch(/12 jul 2026/)
+  })
+  it('deja pasar una fecha ilegible', () => {
+    expect(purchaseDateLabel('ayer')).toBe('ayer')
+  })
+  it('formatea precios en pesos', () => {
+    expect(priceLabel(650)).toBe('$650')
+    expect(priceLabel(1250)).toBe('$1,250')
+    expect(priceLabel(649.5)).toBe('$649.50')
   })
 })

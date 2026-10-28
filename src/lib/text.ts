@@ -56,3 +56,18 @@ export function decadeLabel(decade: number): string {
 export function looksLikeCompilation(title: string): boolean {
   return /(greatest hits|best of|very best|anthology|collection|grandes [eé]xitos|lo mejor de|live at|en vivo|in concert|box set)/i.test(title)
 }
+
+/** "Hoy" si es la fecha de hoy; si no, "12 jul 2026". Regresa el texto tal cual si no se puede leer. */
+export function purchaseDateLabel(iso: string, now = new Date()): string {
+  const day = iso.slice(0, 10)
+  const d = new Date(`${day}T00:00`)
+  if (Number.isNaN(d.getTime())) return iso
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+  if (day === today) return 'Hoy'
+  return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' })
+}
+
+/** "$650", "$1,250", "$649.50" (pesos). */
+export function priceLabel(n: number): string {
+  return n.toLocaleString('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2 })
+}

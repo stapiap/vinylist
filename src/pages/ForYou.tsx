@@ -116,7 +116,7 @@ export function ForYou() {
           {progress && (
             <div className="stack" role="status" aria-live="polite" style={{ gap: 4 }}>
               {!suggestions && <span className="muted">La primera vez tarda hasta un minuto porque consultamos los catálogos con calma; después es casi instantáneo.</span>}
-              <progress value={progress.done} max={progress.total} style={{ width: '100%' }} />
+              <progress className="progress" value={progress.done} max={progress.total} />
               <span className="muted">{progress.step}…</span>
             </div>
           )}
@@ -131,16 +131,16 @@ export function ForYou() {
                     <div className="row" style={{ alignItems: 'center' }}>
                       <Cover src={s.thumbUrl ?? s.coverUrl} title={s.title} className="thumb" />
                       <div className="grow stack" style={{ gap: 2 }}>
-                        <h3 className="result__title" style={{ margin: 0, fontSize: 'inherit' }}>{s.title}</h3>
+                        <h3 className="result__title">{s.title}</h3>
                         <span className="result__meta">{s.artist}{s.year ? ` · ${s.year}` : ''}</span>
                         <span style={{ fontSize: 13, color: 'var(--text-2)' }}>{s.reason}</span>
                       </div>
                     </div>
                     <div className="row">
                       <a className="btn btn--sm grow" href={spotifySearchUrl(s.artist, s.title)} target="_blank" rel="noreferrer">
-                        <SpotifyIcon width={18} height={18} style={{ color: '#1DB954' }} /> Escuchar<span className="visually-hidden"> «{s.title}» en Spotify</span>
+                        <SpotifyIcon width={18} height={18} className="spotify" /> Escuchar<span className="visually-hidden"> «{s.title}» en Spotify</span>
                       </a>
-                      <button className="btn btn--sm grow" onClick={() => toggleWish(s)} aria-pressed={wished}>{wished ? 'Ya lo quieres' : 'Lo quiero'}</button>
+                      <button className={`btn btn--sm grow ${wished ? '' : 'btn--primary'}`} onClick={() => toggleWish(s)} aria-pressed={wished}>{wished ? '✓ En tus deseos' : 'Lo quiero'}</button>
                     </div>
                   </li>
                 )

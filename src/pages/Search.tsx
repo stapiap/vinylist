@@ -1,11 +1,11 @@
 import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { lookupText } from '../api/lookup'
 import { addCandidate, duplicateOf } from '../lib/addFromCandidate'
 import { CandidateList } from '../components/CandidateList'
 import { SearchIcon } from '../components/Icons'
+import { Logo } from '../components/Logo'
 import type { Album, ReleaseCandidate } from '../types'
-import { Link } from 'react-router-dom'
 
 export function Search() {
   const nav = useNavigate()
@@ -18,7 +18,7 @@ export function Search() {
 
   async function submit(e: FormEvent) {
     e.preventDefault()
-    if (!q.trim()) return
+    if (!q.trim() || loading) return
     setLoading(true)
     setError(null)
     try {
@@ -51,19 +51,20 @@ export function Search() {
 
   return (
     <main className="page">
-      <div className="stack" style={{ gap: 2 }}>
-        <span className="eyebrow">Agregar disco</span>
-        <h1>Buscar a mano</h1>
-        <span className="muted">Para discos sin código de barras: artista, título o número de catálogo.</span>
+      <div className="stack" style={{ gap: 8 }}>
+        <Logo />
+        <h1>Buscar</h1>
+        <span className="muted">Por artista, título o número de catálogo. Sirve para discos sin código de barras.</span>
       </div>
-      <form onSubmit={submit} className="row">
-        <label className="search grow">
+      <form onSubmit={submit}>
+        <label className="search">
           <SearchIcon width={20} height={20} />
           <span className="visually-hidden">Buscar en Discogs y MusicBrainz</span>
-          <input type="search" placeholder="Ej. Fleetwood Mac Rumours" value={q} onChange={(e) => setQ(e.target.value)} autoFocus />
+          <input type="search" enterKeyHint="search" placeholder="Ej. Fleetwood Mac Rumours" value={q} onChange={(e) => setQ(e.target.value)} autoFocus />
         </label>
-        <button className="btn btn--primary" type="submit" disabled={loading}>{loading ? '…' : 'Buscar'}</button>
       </form>
+      {loading && <p className="muted" role="status" aria-live="polite" style={{ margin: 0 }}>Buscando…</p>}
+      {!loading && results === null && <button type="button" className="btn btn--primary" onClick={() => submit({ preventDefault() {} } as FormEvent)} disabled={!q.trim()}>Buscar</button>}
 
       {error && <div className="notice notice--error">{error}</div>}
 
@@ -82,7 +83,13 @@ export function Search() {
       )}
 
       {results && results.length === 0 && <div className="empty"><p>No encontré ediciones en vinilo con ese texto. Prueba con menos palabras.</p></div>}
-      {results && results.length > 0 && <CandidateList candidates={results} onPick={pick} busyId={busy} />}
+      {results && results.length > 0 && (
+        <>
+          <span className="eyebrow">{results.length} {results.length === 1 ? 'resultado' : 'resultados'} en vinilo</span>
+          <CandidateList candidates={results} onPick={pick} busyId={busy} />
+          <span className="muted" style={{ textAlign: 'center', fontSize: 13 }}>¿No aparece? Prueba con el número de catálogo de la funda.</span>
+        </>
+      )}
     </main>
   )
 }
