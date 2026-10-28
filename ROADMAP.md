@@ -1,4 +1,4 @@
-# Versiones de Surcos
+# Versiones de VinyList
 
 ## v0.1 · Primera versión (esta)
 - [x] Escanear código de barras con la cámara, o escribirlo a mano.

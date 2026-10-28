@@ -1,6 +1,6 @@
-# Surcos
+# VinyList
 
-La colección de vinilos de la familia, en el celular de todos. Sin membresías.
+Tu colección de vinilos, en familia y sin membresías. En el celular de todos.
 
 Es una **PWA**: se abre desde un enlace, se instala en la pantalla de inicio de iPhone y Android, y funciona sin internet.
 

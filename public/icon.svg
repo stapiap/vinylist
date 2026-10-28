@@ -1,8 +1,34 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" rx="112" fill="#14110F"/>
-  <circle cx="256" cy="256" r="176" fill="#1B1714" stroke="#3A332D" stroke-width="6"/>
-  <circle cx="256" cy="256" r="140" fill="none" stroke="#2E2824" stroke-width="10"/>
-  <circle cx="256" cy="256" r="104" fill="none" stroke="#2E2824" stroke-width="10"/>
-  <circle cx="256" cy="256" r="62" fill="#F2A93B"/>
-  <circle cx="256" cy="256" r="12" fill="#14110F"/>
+  <defs>
+    <clipPath id="ios"><rect width="512" height="512" rx="114"/></clipPath>
+    <clipPath id="funda"><rect x="0" y="0" width="100" height="100" rx="3"/></clipPath>
+  </defs>
+  <g clip-path="url(#ios)">
+    <rect width="512" height="512" fill="#0F6B70"/>
+    <g transform="translate(61.6 121) scale(2.7)">
+      <rect x="0" y="0" width="100" height="100" rx="3" fill="#ECEAE4"/>
+      <rect x="0" y="0" width="2.2" height="100" rx="1" fill="#000" fill-opacity=".16"/>
+      <rect x="97.6" y="0" width="2.4" height="100" fill="rgba(21,32,31,.12)"/>
+      <g clip-path="url(#funda)"><circle cx="97.6" cy="52.6" r="48" fill="rgba(5,20,21,.3)"/></g>
+      <g transform="translate(47.2 2) scale(.96)">
+        <circle cx="50" cy="50" r="50" fill="#15201F"/>
+        <circle cx="50" cy="50" r="49.2" fill="none" stroke-width="1.6" stroke="rgba(236,234,228,.6)"/>
+        <circle cx="50" cy="50" r="18.25" fill="none" stroke-width="3.5" stroke-opacity="0.06" stroke="#FFFFFF"/>
+        <g fill="none" stroke-width="0.7" stroke-opacity="0.22" stroke="#F4F2ED">
+          <circle cx="50" cy="50" r="21.5"/><circle cx="50" cy="50" r="23.82"/><circle cx="50" cy="50" r="26.14"/><circle cx="50" cy="50" r="28.45"/><circle cx="50" cy="50" r="30.77"/><circle cx="50" cy="50" r="33.09"/><circle cx="50" cy="50" r="35.41"/><circle cx="50" cy="50" r="37.73"/><circle cx="50" cy="50" r="40.05"/><circle cx="50" cy="50" r="42.36"/><circle cx="50" cy="50" r="44.68"/><circle cx="50" cy="50" r="47"/>
+        </g>
+        <g fill="none" stroke-width="1" stroke-opacity="0.34" stroke="#F4F2ED"><circle cx="50" cy="50" r="29.5"/><circle cx="50" cy="50" r="39"/></g>
+        <g fill="#FFFFFF">
+          <path d="M5.85 26.53 A50 50 0 0 1 26.53 5.85 L42.25 35.43 A16.5 16.5 0 0 0 35.43 42.25 Z" fill-opacity="0.06"/><path d="M94.15 73.47 A50 50 0 0 1 73.47 94.15 L57.75 64.57 A16.5 16.5 0 0 0 64.57 57.75 Z" fill-opacity="0.06"/>
+          <path d="M9.55 20.61 A50 50 0 0 1 20.61 9.55 L40.3 36.65 A16.5 16.5 0 0 0 36.65 40.3 Z" fill-opacity="0.07"/><path d="M90.45 79.39 A50 50 0 0 1 79.39 90.45 L59.7 63.35 A16.5 16.5 0 0 0 63.35 59.7 Z" fill-opacity="0.07"/>
+          <path d="M12.26 17.2 A50 50 0 0 1 17.2 12.26 L39.18 37.55 A16.5 16.5 0 0 0 37.55 39.18 Z" fill-opacity="0.09"/><path d="M87.74 82.8 A50 50 0 0 1 82.8 87.74 L60.82 62.45 A16.5 16.5 0 0 0 62.45 60.82 Z" fill-opacity="0.09"/>
+          <path d="M77.23 8.07 A50 50 0 0 1 91.93 22.77 L63.84 41.01 A16.5 16.5 0 0 0 58.99 36.16 Z" fill-opacity="0.03"/><path d="M22.77 91.93 A50 50 0 0 1 8.07 77.23 L36.16 58.99 A16.5 16.5 0 0 0 41.01 63.84 Z" fill-opacity="0.03"/>
+        </g>
+        <path d="M5.95 29.46 A48.6 48.6 0 0 1 29.46 5.95" fill="none" stroke-width="1.2" stroke-opacity="0.55" stroke-linecap="round" stroke="#FFFFFF"/>
+        <circle cx="50" cy="50" r="16.5" fill="#2A9DA3"/>
+        <circle cx="50" cy="50" r="12.5" fill="none" stroke-width="0.7" stroke-opacity="0.35" stroke="#15201F"/>
+        <circle cx="50" cy="50" r="2.2" fill="#ECEAE4"/>
+      </g>
+    </g>
+  </g>
 </svg>

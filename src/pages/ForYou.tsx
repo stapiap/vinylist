@@ -10,6 +10,7 @@ import { spotifySearchUrl } from '../lib/spotify'
 import { getProfileName } from '../lib/profile'
 import { Cover } from '../components/AlbumCard'
 import { SpotifyIcon } from '../components/Icons'
+import { Logo } from '../components/Logo'
 
 const OFFLINE_MSG = 'Sin conexión. Revisa el internet e intenta de nuevo.'
 
@@ -81,8 +82,8 @@ export function ForYou() {
 
   return (
     <main className="page">
-      <div className="stack" style={{ gap: 2 }}>
-        <span className="eyebrow">Surcos</span>
+      <div className="stack" style={{ gap: 8 }}>
+        <Logo />
         <h1>Para ti</h1>
         <span className="muted">Según tus calificaciones y lo que has comprado</span>
       </div>
@@ -136,8 +137,8 @@ export function ForYou() {
                       </div>
                     </div>
                     <div className="row">
-                      <a className="btn btn--sm grow" href={spotifySearchUrl(s.artist, s.title)} target="_blank" rel="noreferrer" style={{ background: '#1DB954', color: '#0B1F12', borderColor: '#1DB954' }}>
-                        <SpotifyIcon width={18} height={18} /> Escuchar<span className="visually-hidden"> «{s.title}» en Spotify</span>
+                      <a className="btn btn--sm grow" href={spotifySearchUrl(s.artist, s.title)} target="_blank" rel="noreferrer">
+                        <SpotifyIcon width={18} height={18} style={{ color: '#1DB954' }} /> Escuchar<span className="visually-hidden"> «{s.title}» en Spotify</span>
                       </a>
                       <button className="btn btn--sm grow" onClick={() => toggleWish(s)} aria-pressed={wished}>{wished ? 'Ya lo quieres' : 'Lo quiero'}</button>
                     </div>

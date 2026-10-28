@@ -5,6 +5,7 @@ import { db, exportCollection } from '../db'
 import { getProfileName, setProfileName } from '../lib/profile'
 import { discogsConfigured } from '../api/discogs'
 import { BackIcon } from '../components/Icons'
+import { Logo } from '../components/Logo'
 import type { Album } from '../types'
 
 export function Settings() {
@@ -17,7 +18,7 @@ export function Settings() {
     const blob = new Blob([exportCollection(albums)], { type: 'application/json' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
-    a.download = `surcos-${new Date().toISOString().slice(0, 10)}.json`
+    a.download = `vinylist-${new Date().toISOString().slice(0, 10)}.json`
     a.click()
     URL.revokeObjectURL(a.href)
   }
@@ -25,7 +26,7 @@ export function Settings() {
   async function importFile(file: File) {
     try {
       const data = JSON.parse(await file.text()) as { albums?: Album[] }
-      if (!Array.isArray(data.albums)) throw new Error('El archivo no es un respaldo de Surcos.')
+      if (!Array.isArray(data.albums)) throw new Error('El archivo no es un respaldo de VinyList.')
       await db.albums.bulkPut(data.albums)
       setMsg(`Se importaron ${data.albums.length} discos.`)
     } catch (e) {
@@ -65,7 +66,10 @@ export function Settings() {
         {msg && <div className="notice">{msg}</div>}
       </section>
 
-      <p className="muted">Surcos v{__APP_VERSION__}. Hecha para la familia, sin membresías.</p>
+      <div className="about">
+        <Logo size={32} />
+        <span>Versión {__APP_VERSION__} · Hecha para la familia, sin membresías.</span>
+      </div>
     </main>
   )
 }

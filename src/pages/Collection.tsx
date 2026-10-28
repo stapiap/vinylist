@@ -4,7 +4,8 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '../db'
 import { applyFilters, collectDecades, collectGenres, DEFAULT_FILTERS, type Filters } from '../lib/filters'
 import { AlbumCard } from '../components/AlbumCard'
-import { SearchIcon, ScanIcon } from '../components/Icons'
+import { SearchIcon, ScanIcon, SettingsIcon } from '../components/Icons'
+import { Logo } from '../components/Logo'
 
 const SORTS: { value: Filters['sort']; label: string }[] = [
   { value: 'recent', label: 'Agregados recientemente' },
@@ -24,12 +25,14 @@ export function Collection() {
   return (
     <main className="page">
       <div className="header">
-        <div className="stack" style={{ gap: 2 }}>
-          <span className="eyebrow">Surcos</span>
-          <h1>Nuestra colección</h1>
-          <span className="muted">{albums.length} {albums.length === 1 ? 'disco' : 'discos'}</span>
+        <div className="stack" style={{ gap: 8 }}>
+          <Logo />
+          <div className="title-row">
+            <h1>Colección</h1>
+            <span className="badge">{albums.length} {albums.length === 1 ? 'disco' : 'discos'}</span>
+          </div>
         </div>
-        <Link to="/ajustes" className="icon-btn" aria-label="Ajustes">⚙</Link>
+        <Link to="/ajustes" className="icon-btn" aria-label="Ajustes"><SettingsIcon /></Link>
       </div>
 
       <label className="search">
@@ -61,8 +64,9 @@ export function Collection() {
 
       {albums.length === 0 ? (
         <div className="empty">
-          <h2>Todavía no hay discos</h2>
-          <p>Escanea el código de barras de tu primer vinilo o búscalo por nombre.</p>
+          <div className="empty__tiles" aria-hidden="true"><i /><i /><i /><i /></div>
+          <h2>Tu colección empieza aquí</h2>
+          <p>Escanea el código de barras de un disco o búscalo por nombre. La portada y los datos se llenan solos.</p>
           <Link to="/escanear" className="btn btn--primary"><ScanIcon width={20} height={20} /> Escanear un disco</Link>
           <Link to="/buscar" className="btn">Buscar a mano</Link>
         </div>

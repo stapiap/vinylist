@@ -45,8 +45,8 @@ export function AlbumPage() {
 
       <section className="card stack" aria-labelledby="rating-h">
         <div className="row" style={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
-          <span id="rating-h" style={{ fontWeight: 700, fontSize: 14 }}>Tu calificación</span>
-          <span style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 22, color: 'var(--accent)' }}>{album.rating ? `${formatStars(album.rating)} / 5` : '—'}</span>
+          <span id="rating-h" className="eyebrow">Tu calificación · opcional</span>
+          <span className="rating-big">{album.rating ? `${formatStars(album.rating)} / 5` : '—'}</span>
         </div>
         <StarRating value={album.rating} onChange={(r) => updateAlbum(album.id, { rating: r })} />
         <span className="muted" style={{ fontSize: 13 }}>Toca la mitad izquierda de una estrella para media estrella.</span>

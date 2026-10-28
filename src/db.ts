@@ -11,14 +11,14 @@ interface CacheEntry {
   value: unknown
 }
 
-class SurcosDB extends Dexie {
+class VinyListDB extends Dexie {
   albums!: EntityTable<Album, 'id'>
   wishlist!: EntityTable<WishlistItem, 'id'>
   /** Respuestas de Discogs, MusicBrainz y ListenBrainz para "Para ti", con fecha. */
   tasteCache!: EntityTable<CacheEntry, 'key'>
 
   constructor() {
-    super('surcos')
+    super('vinylist')
     this.version(1).stores({
       albums: 'id, artist, title, year, barcode, discogsId, rating, addedAt, *genres, *styles',
       wishlist: 'id, wantedBy, addedAt',
@@ -31,7 +31,7 @@ class SurcosDB extends Dexie {
   }
 }
 
-export const db = new SurcosDB()
+export const db = new VinyListDB()
 
 export function newId(): string {
   return crypto.randomUUID()
@@ -114,5 +114,5 @@ export async function patchAlbumMeta(id: string, changes: Pick<Album, 'spotifyAl
 }
 
 export function exportCollection(albums: Album[]): string {
-  return JSON.stringify({ app: 'surcos', version: 1, exportedAt: new Date().toISOString(), albums }, null, 2)
+  return JSON.stringify({ app: 'vinylist', version: 1, exportedAt: new Date().toISOString(), albums }, null, 2)
 }

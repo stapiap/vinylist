@@ -8,7 +8,7 @@ import type { ReleaseCandidate, Track } from '../types'
  * pasan por la función `discogs` de Supabase para que el token no viaje al celular.
  */
 const BASE = 'https://api.discogs.com'
-const USER_AGENT = 'Surcos/0.1 (app familiar de vinilos)'
+const USER_AGENT = 'VinyList/0.1 (app familiar de vinilos)'
 
 function token(): string | undefined {
   return import.meta.env.VITE_DISCOGS_TOKEN || undefined

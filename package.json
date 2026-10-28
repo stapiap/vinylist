@@ -1,8 +1,8 @@
 {
-  "name": "surcos",
+  "name": "vinylist",
   "private": true,
   "version": "0.1.0",
-  "description": "La colección de vinilos de la familia, en el celular de todos.",
+  "description": "Tu colección de vinilos, en familia y sin membresías.",
   "type": "module",
   "scripts": {
     "dev": "vite",

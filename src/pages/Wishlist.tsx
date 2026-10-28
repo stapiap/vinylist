@@ -4,6 +4,7 @@ import { db, newId } from '../db'
 import { Cover } from '../components/AlbumCard'
 import { getProfileName } from '../lib/profile'
 import { spotifySearchUrl } from '../lib/spotify'
+import { Logo } from '../components/Logo'
 
 /**
  * Lista de deseos de la familia. En esta versión vive en el celular;
@@ -26,9 +27,9 @@ export function Wishlist() {
 
   return (
     <main className="page">
-      <div className="stack" style={{ gap: 2 }}>
-        <span className="eyebrow">Surcos</span>
-        <h1>Lista de deseos</h1>
+      <div className="stack" style={{ gap: 8 }}>
+        <Logo />
+        <h1>Deseos</h1>
         <span className="muted">Lo que la familia quiere tener. Útil para regalos.</span>
       </div>
 

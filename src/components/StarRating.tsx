@@ -23,7 +23,7 @@ export function StarRating({ value, onChange, size = 'md' }: Props) {
         const width = fill === 'full' ? '100%' : fill === 'half' ? '50%' : '0%'
         return (
           <div className="star" key={i}>
-            <svg width={px} height={px} viewBox="0 0 24 24" fill="none" stroke="#6B6157" strokeWidth={1.5} strokeLinejoin="round" aria-hidden="true"><StarPath /></svg>
+            <svg width={px} height={px} viewBox="0 0 24 24" fill="none" stroke="var(--star-empty)" strokeWidth={1.5} strokeLinejoin="round" aria-hidden="true"><StarPath /></svg>
             <div className="star__fill" style={{ width }}>
               <svg width={px} height={px} viewBox="0 0 24 24" fill="var(--accent)" stroke="var(--accent)" strokeWidth={1.5} strokeLinejoin="round" aria-hidden="true"><StarPath /></svg>
             </div>

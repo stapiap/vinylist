@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="funda"><rect x="0" y="0" width="100" height="100" rx="3"/></clipPath>
+  </defs>
+  <rect width="512" height="512" fill="#0F6B70"/>
+  <g transform="translate(100 139) scale(2.2)">
+    <rect x="0" y="0" width="100" height="100" rx="3" fill="#ECEAE4"/>
+    <rect x="0" y="0" width="2.2" height="100" rx="1" fill="#000" fill-opacity=".16"/>
+    <rect x="97.6" y="0" width="2.4" height="100" fill="rgba(21,32,31,.12)"/>
+    <g clip-path="url(#funda)"><circle cx="97.6" cy="52.6" r="48" fill="rgba(5,20,21,.3)"/></g>
+    <g transform="translate(47.2 2) scale(.96)">
+      <circle cx="50" cy="50" r="50" fill="#15201F"/>
+      <circle cx="50" cy="50" r="49.2" fill="none" stroke-width="1.6" stroke="rgba(236,234,228,.6)"/>
+      <g fill="none" stroke-width="1.7" stroke-opacity="0.26" stroke="#F4F2ED"><circle cx="50" cy="50" r="25"/><circle cx="50" cy="50" r="31"/><circle cx="50" cy="50" r="37"/><circle cx="50" cy="50" r="43"/></g>
+      <g fill="#FFFFFF">
+        <path d="M6.27 25.76 A50 50 0 0 1 25.76 6.27 L41.76 35.13 A17 17 0 0 0 35.13 41.76 Z" fill-opacity="0.08"/><path d="M93.73 74.24 A50 50 0 0 1 74.24 93.73 L58.24 64.87 A17 17 0 0 0 64.87 58.24 Z" fill-opacity="0.08"/>
+        <path d="M10.6 19.22 A50 50 0 0 1 19.22 10.6 L39.53 36.6 A17 17 0 0 0 36.6 39.53 Z" fill-opacity="0.1"/><path d="M89.4 80.78 A50 50 0 0 1 80.78 89.4 L60.47 63.4 A17 17 0 0 0 63.4 60.47 Z" fill-opacity="0.1"/>
+      </g>
+      <path d="M6.23 29.59 A48.3 48.3 0 0 1 29.59 6.23" fill="none" stroke-width="1.7" stroke-opacity="0.5" stroke-linecap="round" stroke="#FFFFFF"/>
+      <circle cx="50" cy="50" r="17" fill="#2A9DA3"/>
+      <circle cx="50" cy="50" r="2.5" fill="#ECEAE4"/>
+    </g>
+  </g>
+</svg>
